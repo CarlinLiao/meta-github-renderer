@@ -1,28 +1,30 @@
 import React, { Component } from 'react';
 import HandleHandler from './HandleHandler';
 import UserRender from './UserRender';
+import CompareUsers from './CompareUsers';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.onUsernameSubmit = this.onUsernameSubmit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
     this.state = {
-      username: ''
+        username: '',
+        searchTerm: '',
+        comparisonUser: ''
     };
   }
 
-  onUsernameSubmit(username) {
-      this.setState({
-        username
-      });
+  onSubmit(handlerProps) {
+      this.setState(handlerProps);
   }
 
   render() {
     return (
       <div className="App">
         <p>Enter a Github username to render their repos</p>
-        <HandleHandler onUsernameSubmit={this.onUsernameSubmit}/>
-        <UserRender username={this.state.username} />
+        <HandleHandler onSubmit={this.onSubmit}/>
+        <UserRender username={this.state.username} searchTerm={this.state.searchTerm}/>
+        <CompareUsers user1={this.state.username} user2={this.state.comparisonUser}/>
       </div>
     );
   }

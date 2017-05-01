@@ -5,6 +5,7 @@ class UserRender extends Component {
         super(props);
         this.state = {
             username: props.username,
+            searchTerm: props.searchTerm,
             loading: false,
             enterEmpty: true,
             usernameInvalid: true,
@@ -17,6 +18,8 @@ class UserRender extends Component {
     }
 
     componentWillUpdate(nextProps, nextState) {
+
+        nextState.searchTerm = nextProps.searchTerm.trim();
         
         if (nextProps.username !== nextState.username) {
             nextState.username = nextProps.username;
@@ -50,7 +53,6 @@ class UserRender extends Component {
             fetch("https://api.github.com/users/" + this.state.username + "/repos")
             .then(resp => resp.json()
             .then(dat => {
-                console.log(this);
                 if (dat.message === "Not Found") {
                     this.setState({
                         loading: false,
@@ -93,20 +95,48 @@ class UserRender extends Component {
             return(<p>User "{this.state.username}" has no repositories.</p>);
         } else {
             // render stuff
+
+            // decides which repos to list based on searchTerm
             var repos = this.state.data;
+            const st = this.state.searchTerm;
+            var toMatch = new RegExp(this.state.searchTerm, 'i');
+            var hasResult = false;
             repos = repos.map((item,index) => {
-                return (<li><a href={item.html_url} >{item.name}</a></li>);
+                if (!st || (
+                        item.name.search(toMatch) > -1 ||
+                        (item.description && item.description.search(toMatch) > -1)
+                        )) {
+                    hasResult = true;
+                    return (
+                        <tr>
+                            <td><a href={item.html_url}>{item.name}</a></td>
+                            <td className="count">{item.stargazers_count} stars</td>
+                            <td className="count">{item.watchers_count} watchers</td>
+                            <td className="count">{item.forks_count} forks</td>
+                        </tr>);
+                } else {
+                    return;
+                }
             });
+            if (!hasResult) {
+                repos = (<p>No results</p>);
+            } else {
+                repos = (<table><tbody>{repos}</tbody></table>);
+            }
+
+
             return(
                 <div>
-                    <p><a href={this.state.data[0].owner.html_url}>
-                        @{this.state.data[0].owner.login}</a></p>
+                    <p>Repos owned by <a href={this.state.data[0].owner.html_url}>
+                        @{this.state.data[0].owner.login}</a>{
+                            this.state.searchTerm ? ' containing \'' + this.state.searchTerm + '\' in title or description' : ''
+                        }</p>
                     <img src={this.state.data[0].owner.avatar_url} 
                          href={this.state.data[0].owner.html_url}
                          alt={this.state.data[0].owner.login + '\'s avatar'}
                          width="100px"
                          height="100px" />
-                    <ul>{repos}</ul>
+                    {repos}
                 </div>
             );            
         }

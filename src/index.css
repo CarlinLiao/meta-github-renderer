@@ -23,30 +23,79 @@ body {
   background-color: #1c1c1c;
   text-align: center;
 }
+
 .boxstuff {
   padding-left: 5px;
   padding-right: 5px;
   margin: auto
 }
+
 a {
   color: lightblue;
   text-decoration: none;
 }
+
 #byline {
   font-style: italic;
   font-size: .6em;
   color: #939393;
 }
+
 #entry {
   margin-left: 5px;
 }
+
 .texty {
   vertical-align: middle;
 }
+
 ul {
   font-size: .6em;
   text-align: left;
+  margin-top: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 200px;
+}
+
+form {
   margin-left: auto;
   margin-right: auto;
   width: 400px;
+}
+
+label {
+  width: 180px;
+  clear: left;
+  text-align: right;
+  padding-right: 10px;
+  padding-bottom: .6em;
+}
+
+input, label {
+  float: center;
+}
+
+.watchers {
+  text-align: right;
+}
+
+table {
+  font-size: .5em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+td {
+  text-align: right;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.count {
+  text-align: right;
+}
+
+.followerHeader {
+  margin-bottom: .2em;
 }
